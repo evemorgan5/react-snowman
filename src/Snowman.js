@@ -9,6 +9,8 @@ import img4 from "./4.png";
 import img5 from "./5.png";
 import img6 from "./6.png";
 
+import { randomWord, ENGLISH_WORDS } from "./words";
+
 
 /** Snowman game: plays hangman-style game with a melting snowman.
  *
@@ -25,7 +27,7 @@ import img6 from "./6.png";
 
 function Snowman({
       images=[img0, img1, img2, img3, img4, img5, img6],
-      words=["apple"],
+      words=[randomWord(ENGLISH_WORDS)],
       maxWrong=6,
     }) {
   /** by default, allow 6 guesses and use provided gallows images. */
@@ -65,6 +67,7 @@ function Snowman({
         <button
             key={ltr}
             value={ltr}
+            id={ltr}
             onClick={handleGuess}
             disabled={guessedLetters.has(ltr)}
         >
@@ -73,16 +76,26 @@ function Snowman({
     ));
   }
 
+  function restartButton() {
+    setNWrong(0);
+    setGuessedLetters(() => new Set());
+    setAnswer((words)[0]);
+  }
+
   return (
       <div className="Snowman">
-        <img src={(images)[nWrong]} alt={nWrong} />
-        <p> Number wrong: {nWrong}</p>
+        {nWrong < maxWrong ? <img src={(images)[nWrong]} alt={nWrong} /> :
+         <img src={(images)[maxWrong]} alt={maxWrong} />}
+        <p className="Wrong-guesses"> Number of wrong guesses: {nWrong}</p>
         <p className="Snowman-word">{guessedWord()}</p>
-        {nWrong < 7 ? <p className="Letter-buttons">{generateButtons()}</p> :
-        <p>You lose. The correct word was {answer}.</p>}
+        {nWrong < maxWrong ? <p className="Letter-buttons">{generateButtons()}</p> :
+         <p>You lose. The correct word was {answer}.</p>}
+        <button onClick={restartButton}>Restart</button>
       </div>
   );
 }
 
 
 export default Snowman;
+
+

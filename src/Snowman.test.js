@@ -1,48 +1,38 @@
 import Snowman from "./Snowman";
 import React from "react";
 import { fireEvent, render } from "@testing-library/react";
-import TEST_IMAGES from "./_testCommon";
-import nWrong from "./Snowman";
 
-it("matches snapshot", function () {
-  console.log("snowman starting page");
+
+// let renderedGame;
+
+// beforeEach(function () {
+//   renderedGame = render(<Snowman maxWrong={MAX_WRONG} words={["apple"]} />);
+// });
+
+// // sets initial render of html of component
+// //then compares current render to initial render of html of component
+// it("matches snapshot on initial render", function () {
+//   console.log("snowman starting page");
+//   const { container } = render(
+//     <Snowman
+//       words={["apple"]}
+//       maxWrong={6}
+//     />
+//   );
+//   expect(container).toMatchSnapshot();
+// });
+
+
+it("test Letter buttons are no longer displayed on completing game", function () {
   const { container } = render(
     <Snowman
-      images={TEST_IMAGES}
-      words="apple"
+      words={["apple"]}
+      maxWrong={1}
     />
-  );
-  expect(container).toMatchSnapshot();
+   )
+
+  fireEvent.click(container.querySelector("#b"));
+  expect(container.querySelector(".Letter-buttons")).not.toBeInTheDocument();
 });
 
 
-it("test Snowman word no longer displayed on completing game", function () {
-  const { container } = render(
-    <Snowman
-      images={TEST_IMAGES}
-      words="apple"
-    />
-  );
-
-  while (nWrong < 7){
-    fireEvent.click(container.querySelector(".Snowman-word"));
-  }
-  expect(container.querySelector(".Letter-buttons")).not.toBeInTheDocument();
-})
-
-
-// it("matches snapshot", function () {
-//   console.log("snowman game over page");
-//   const { container } = render(
-//     <Snowman
-//       images={TEST_IMAGES}
-//       words="apple"
-//     />
-//   );
-//   let i = 0;
-//   while (i < 7){
-//     fireEvent.click(container.querySelector(".Snowman-word"));
-//     i += 1;
-//   }
-//   expect(container).toMatchSnapshot();
-// });
